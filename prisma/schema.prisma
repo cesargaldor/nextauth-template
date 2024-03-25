@@ -1,0 +1,64 @@
+datasource db {
+    provider = "mongodb"
+    url      = env("DATABASE_URL")
+}
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+model accounts {
+    id                String  @id @default(auto()) @map("_id") @db.ObjectId
+    userId            String  @db.ObjectId
+    type              String
+    provider          String
+    providerAccountId String
+    refresh_token     String?
+    access_token      String?
+    expires_at        Int?
+    token_type        String?
+    scope             String?
+    id_token          String?
+    session_state     String?
+
+    user users @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@unique([provider, providerAccountId])
+}
+
+model sessions {
+    id           String   @id @default(auto()) @map("_id") @db.ObjectId
+    sessionToken String   @unique
+    expires      DateTime
+    userId       String   @db.ObjectId
+    user         users    @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model users {
+    id       String     @id @default(auto()) @map("_id") @db.ObjectId
+    name     String?
+    email    String?    @unique
+    password String?
+    phone    Int?
+    image    String?
+    accounts accounts[]
+    sessions sessions[]
+    posts    posts[]
+}
+
+model posts {
+    id           String @id @default(auto()) @map("_id") @db.ObjectId
+    brand        String
+    model        String
+    year         Int
+    price        Float
+    kilometers   Int
+    power        Int
+    displacement Int
+    color        String
+    province     String
+    city         String
+
+    userId String @db.ObjectId
+    User   users? @relation(fields: [userId], references: [id])
+}
