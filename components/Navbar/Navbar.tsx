@@ -40,7 +40,7 @@ export default function Navbar({ user }: Props) {
             <div className="dropdown dropdown-end">
               <div className="avatar" tabIndex={0} role="button">
                 <div className="w-12 rounded-full">
-                  <img src={user?.image as string} />
+                  <img src={user?.image as string} alt="User avatar" />
                 </div>
               </div>
               <ul

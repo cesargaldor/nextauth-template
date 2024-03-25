@@ -25,18 +25,21 @@ export default function SignUpForm({ resetTab }: { resetTab: () => void }) {
     formState: { errors },
   } = useForm<SignUpSchemaType>({ resolver: zodResolver(SignUpSchema) });
 
-  const signUp = useCallback((data: SignUpSchemaType) => {
-    setIsLoading(true);
-    fetch("/api/auth/register", {
-      method: "POST",
-      body: JSON.stringify(data),
-    })
-      .then(() => toast.success("¡Usuario creado correctamente!"))
-      .finally(() => {
-        setIsLoading(false);
-        resetTab();
-      });
-  }, []);
+  const signUp = useCallback(
+    (data: SignUpSchemaType) => {
+      setIsLoading(true);
+      fetch("/api/auth/register", {
+        method: "POST",
+        body: JSON.stringify(data),
+      })
+        .then(() => toast.success("¡Usuario creado correctamente!"))
+        .finally(() => {
+          setIsLoading(false);
+          resetTab();
+        });
+    },
+    [resetTab]
+  );
 
   return (
     <div className="w-4/5 md:w-2/3 xl:w-1/3 2xl:w-1/4 mt-4">

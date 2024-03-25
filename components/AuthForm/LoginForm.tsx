@@ -24,23 +24,26 @@ export default function LoginForm() {
     formState: { errors },
   } = useForm<LoginSchemaType>({ resolver: zodResolver(LoginSchema) });
 
-  const login = useCallback((data: LoginSchemaType) => {
-    const { email, password } = data;
-    setIsLoading(true);
-    signIn("credentials", { email, password, redirect: false })
-      .then((res) => {
-        if (res?.error) {
-          toast.error(res?.error);
-          return;
-        }
+  const login = useCallback(
+    (data: LoginSchemaType) => {
+      const { email, password } = data;
+      setIsLoading(true);
+      signIn("credentials", { email, password, redirect: false })
+        .then((res) => {
+          if (res?.error) {
+            toast.error(res?.error);
+            return;
+          }
 
-        router.replace(HOME_ROUTE);
-        return router.refresh();
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  }, []);
+          router.replace(HOME_ROUTE);
+          return router.refresh();
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    },
+    [router]
+  );
 
   return (
     <div className="w-4/5 md:w-2/3 xl:w-1/3 2xl:w-1/4 mt-4">
